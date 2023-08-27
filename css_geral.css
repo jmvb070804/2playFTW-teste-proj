@@ -1,0 +1,22 @@
+html{
+	scroll-behavior: smooth;
+}
+
+body{
+	background-color: #2B242D;
+	
+}
+
+.header{
+	width: 100%;
+	margin-top: 2%;
+}
+
+.title{
+	font-family: "acumin-pro-semi-condensed", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+	font-size: 38px;
+	text-align: center;
+	color: #FFFFFF
+}
