@@ -3,13 +3,14 @@ html{
 }
 
 body{
-	background-color: #2B242D;
+	background-color: #2C242C;
 	
 }
 
 .header{
-	width: 100%;
+	width: 25%;
 	margin-top: 2%;
+	margin-left: 37.5%;
 }
 
 .title{
@@ -19,4 +20,41 @@ body{
 	font-size: 38px;
 	text-align: center;
 	color: #FFFFFF
+}
+
+.slogan{
+
+	font-style: normal;
+	text-transform: uppercase;
+	font-family: "Montserrat", sans-serif;
+	font-weight: 100;
+	text-align: center;
+	color: #DABE35 ;
+	margin-top: -25px;
+	letter-spacing: 0px;
+	font-size: 12.5px;
+	
+}
+
+.circle1{
+
+	background:#DABE35;
+	border-radius: 50%;
+	height:10px;
+	width: 10px;
+	margin: 0;
+	position: fixed;
+	margin-top: -40px;
+}
+
+.circle2{
+	background:#DABE35;
+	border-radius: 50%;
+	height: 10px;
+	width: 10px;
+	margin: 0;
+	position:fixed;
+	margin-left: 25%;
+	margin-top: -40px;
+	
 }

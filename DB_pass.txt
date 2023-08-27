@@ -1,2 +1,5 @@
 username: myideas_2playtesteproj
 Password: 2playteste
+
+FTP:
+pass: y&7tw7M!l+]A
