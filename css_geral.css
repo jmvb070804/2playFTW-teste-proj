@@ -4,8 +4,11 @@ html{
 
 body{
 	background-color: #2C242C;
+	font-style: normal;
+	font-family: "Montserrat", sans-serif;
 	
 }
+/* Header CSS */
 
 .header{
 	width: 25%;
@@ -58,3 +61,63 @@ body{
 	margin-top: -40px;
 	
 }
+
+/* Cars Grid CSS*/
+
+main{
+	max-width: 1500px;
+	width:90%;
+	margin: 30px auto;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	margin: auto;
+}
+
+main .card{
+	max-width: 300px;
+	flex: 1 1 210px;
+	text-align: center;
+	height: 400px;
+	border: 1px solid grey;
+	margin: 20px;
+	
+}
+
+main .card .image{
+	height: 50%;
+	margin-bottom: 20px;
+}
+
+main .card .image img{
+	width: 100%;
+	height:100%;
+	object-fit: cover;
+}
+
+main .card .caption {
+	padding-left: 1em;
+	text-align: left;
+	line-height: 3em;
+	height:25%;	
+}
+
+main .card .caption p{
+	font-size: 1.55rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
