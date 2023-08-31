@@ -92,12 +92,11 @@ $conn->close();
     // Update the card display
     cardContainer.innerHTML = '';
     filteredCards.forEach(card => {
-   		// Create and append card elements here
+   		// Create and append card elements
     	const cardElement = document.createElement('div');
     	cardElement.classList.add('card');
                 
         // Create and append card elements
-        // Example:
 		cardElement.innerHTML = `
             <div class="image">
             	<img src="${card.Image}" alt="Car Image">
