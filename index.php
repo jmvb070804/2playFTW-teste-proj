@@ -1,12 +1,23 @@
 <?php
-    require_once 'DB_connection.php';
-    $sql = "SELECT * FROM carros";
-    $result = $conn->query($sql);
+require_once 'DB_connection.php';
 
-    // Check for errors
-    if (!$result) {
-        die("Database query failed: " . $conn->error);
+$sql = "SELECT * FROM carros";
+$result = $conn->query($sql);
+
+// Check for errors
+if (!$result) {
+    die("Database query failed: " . $conn->error);
+}
+
+$carData = array();
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $carData[] = $row;
     }
+}
+
+$conn->close();
 ?>
 
 <!doctype html>
@@ -26,37 +37,93 @@
 <body>
     <?php include_once 'header.php'; ?>
 
-    <main>
-        <?php
-        while ($row = $result->fetch_assoc()) {
-        ?>
-            <div class="card">
-                <div class="image">
-                    <img src="<?php echo htmlspecialchars($row["Image"]); ?>" alt="Car Image">
-                </div>
+    <!-- Add filter and sorting controls -->
+    <div class="filters">
+<label for="sort">Ordenar por:</label>
+        <select id="sort">
+            <option value="name">Nome</option>
+            <option value="price">Preço</option>
+        </select>
+		
+		<label for="filter" class="sort_margin">Filtros:</label>
+        <select id="filter">
+			<option value="all">Todos</option>
+            <option value="Desportivos">Desportivos</option>
+			<option value="classico">Clássicos</option>
+			<option value="S">Classe D</option>
+			<option value="D">Classe S</option>
+        </select>
+    </div>
 
-                <div class="caption">
-                    <p class="product_name"><b><?php echo htmlspecialchars($row["name"]); ?></b></p>
-                </div>
-
-                <div class="lower-caption">
-					<div class="buttons">
-                    	<a href="#" class="tag-button"><?php echo htmlspecialchars($row["Tag"]); ?></a>
-                    	<a href="#" class="tag-button">Classe <?php echo htmlspecialchars($row["Classe"]); ?></a>
-                    	<p class="price"><b>$<?php echo htmlspecialchars($row["Price"]); ?></b></p>
-					</div>
-				</div>
-            </div>
-        <?php
-        }
-        $result->free(); // Free up the result set
-        ?>
-
+    <main id="card-container">
     </main>
-    
-    <?php
-    $conn->close(); // Close the database connection
-    ?>
 
+<script>
+        //card data from the database
+        const carData = <?php echo json_encode($carData); ?>;
+
+        // Get references to filter and sort controls
+        const filterSelect = document.getElementById('filter');
+        const sortSelect = document.getElementById('sort');
+        const cardContainer = document.getElementById('card-container');
+
+        // Function to filter and sort cards
+        function updateCards() {
+            const filterValue = filterSelect.value;
+            const sortValue = sortSelect.value;
+
+            // Filter the cards
+            const filteredCards = filterValue === 'all' ?
+        carData : carData.filter(card => {
+            if (filterValue === 'Desportivos') {
+                return card.Tag === 'Desportivos';
+            } else if (filterValue === 'classico') {
+                return card.Tag === 'classico';
+            } else if (filterValue === 'S') {
+                return card.Classe === 'S';
+            } else if (filterValue === 'D') {
+                return card.Classe === 'D';
+            }
+        });
+
+	// Sort the cards
+    filteredCards.sort((a, b) => (a[sortValue] > b[sortValue]) ? 1 : -1);
+
+    // Update the card display
+    cardContainer.innerHTML = '';
+    filteredCards.forEach(card => {
+   		// Create and append card elements here
+    	const cardElement = document.createElement('div');
+    	cardElement.classList.add('card');
+                
+        // Create and append card elements
+        // Example:
+		cardElement.innerHTML = `
+            <div class="image">
+            	<img src="${card.Image}" alt="Car Image">
+            </div>
+            <div class="caption">
+            	<p class="product_name"><b>${card.name}</b></p>
+            </div>
+            	<div class="lower-caption">
+					<div class="buttons">
+						<a href="#" class="tag-button">${card.Tag}</a>
+                		<a href="#" class="tag-button">Classe ${card.Classe}</a>
+            		</div>
+						<p class="price">$${card.Price}</p>
+          	</div>
+        `;
+                
+        cardContainer.appendChild(cardElement);
+    });
+}
+
+        // Attach event listeners to filter and sort controls
+        filterSelect.addEventListener('change', updateCards);
+        sortSelect.addEventListener('change', updateCards);
+
+        // Initial card display
+        updateCards();
+    </script>
 </body>
 </html>
