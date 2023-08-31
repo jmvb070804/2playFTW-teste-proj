@@ -131,12 +131,21 @@ main .card .lower-caption a{
 }
 
 main .card .lower-caption p{
-	position: fixed;
+	position: static;
 	margin-left: 410px;
 	font-size: 30px;
 	margin-top: -32px;
 	color: #efd036;
 }
+
+/*Cars Container*/
+.scrollable-card-container {
+    height: 900px;
+    overflow-y: auto;
+}
+
+
+
 
 
 /*Filters and Sorts*/
@@ -181,6 +190,19 @@ select option {
 	padding-left: 50px;
 }
 
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px; 
+}
 
+.page-indicators {
+    display: flex;
+    gap: 0px;
+    position: absolute;
+    margin-top: -20px;
+    margin-left: 92.5%;
+}
 
 
