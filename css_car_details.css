@@ -1,0 +1,61 @@
+body{
+	background-color: #2C242C;
+	font-style: normal;
+	font-family: "Montserrat", sans-serif;
+	overflow-y:auto;}
+
+/* Apply styles to the slideshow container */
+.slideshow-container {
+    width: 66%;
+    margin-left: 3%;
+    position: relative;
+}
+
+/* Apply styles to the main image */
+.main-image {
+    width: 100%;
+    overflow: hidden;
+}
+
+.main-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Apply styles to the thumbnail container */
+.thumbnail-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.thumbnail {
+    width: 20%;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+	
+}
+
+.thumbnail.selected {
+	border: 2px solid yellow;
+}
+
+
+/* Apply styles to the navigation arrows */
+.arrows {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    z-index: 5;
+    margin-top: -7%;
+}
+
+.arrow-left,
+.arrow-right {
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+

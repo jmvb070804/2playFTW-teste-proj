@@ -20,183 +20,91 @@ if ($result->num_rows > 0) {
 $conn->close();
 ?>
 
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>OTTO'S DEALERSHIP</title>
-
-    <!-- External files -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slideshow</title>
+	
     <link rel="stylesheet" href="css_geral.css">
+    <link rel="stylesheet" href="css_car_details.css">
 
-    <!-- Fonts -->
     <link rel="stylesheet" href="https://use.typekit.net/nap8sij.css">
+		
 </head>
-
 <body>
     <?php include_once 'header.php'; ?>
-
-    <!-- Add filter and sorting controls -->
-<div class="flex-containers">
-    <div class="filters">
-        <label for="sort">Ordenar por:</label>
-        <select id="sort">
-            <option value="name">Nome</option>
-            <option value="price">Preço</option>
-        </select>
-
-        <label for="filter" class="sort_margin">Filtros:</label>
-        <select id="filter">
-            <option value="all">Todos</option>
-            <option value="Desportivos">Desportivos</option>
-            <option value="classico">Clássicos</option>
-            <option value="S">Classe D</option>
-            <option value="D">Classe S</option>
-        </select>
-    </div>
-
-    <div class="page-indicators" id="page-indicators">
-    	<button class="prev-page">←</button>
     
-    	<button class="next-page">→</button>
-	</div>
-</div>
+    <div class="slideshow-container">
+        <div class="main-image">
+            <img src="imgs/car_test.jpg" alt="Image 1">
+        </div>
+        <div class="arrows">
+            <span class="arrow-left">&lt;</span>
+            <span class="arrow-right">&gt;</span>
+        </div>
+        <div class="thumbnail-container">
+    	<div class="arrows">
+        	<span class="arrow-left">&lt;</span>
+        	<span class="arrow-right">&gt;</span>
+    	</div>
+    		<img src="imgs/car_test.jpg" alt="Image 1" class="thumbnail">
+    		<img src="imgs/car_test2.jpg" alt="Image 2" class="thumbnail">
+    		<img src="imgs/car_test.jpg" alt="Image 3" class="thumbnail">
+    		<img src="imgs/car_test2.jpg" alt="Image 4" class="thumbnail">
+    		<img src="imgs/car_test.jpg" alt="Image 5" class="thumbnail">
+		</div>
+    	</div>
+    <script>
+        // JavaScript code for slideshow functionality
+let slideIndex = 2; // Start with the 3rd image as selected (0-based index)
+const slides = document.querySelectorAll('.thumbnail');
+const mainImage = document.querySelector('.main-image img');
 
-    <div class="scrollable-card-container" id="scrollable-card-container">
-        <main id="card-container">
-            
-        </main>
-    </div>
+function updateMainImage() {
+    mainImage.src = slides[slideIndex].src;
+}
 
-<script>
-    // Card data from the database
-    const carData = <?php echo json_encode($carData); ?>;
-    const cardsPerPage = 9; // Number of cards per page
-    let currentPage = 1;
+function prevSlide() {
+    slideIndex = (slideIndex - 1 + slides.length) % slides.length;
+    updateMainImage();
+    reorderThumbnails();
+}
 
-    // Define CardContainer as a global variable
-    const cardContainer = document.getElementById('card-container');
+function nextSlide() {
+    slideIndex = (slideIndex + 1) % slides.length;
+    updateMainImage();
+    reorderThumbnails();
+}
 
-    // Function to update the page indicators
-    function updatePageIndicators() {
-        const totalPages = Math.ceil(carData.length / cardsPerPage);
-        const pageIndicators = document.querySelector('.page-indicators');
+function reorderThumbnails() {
+    // Remove the selected class from all thumbnails
+    slides.forEach((thumbnail) => thumbnail.classList.remove('selected'));
 
-        pageIndicators.innerHTML = '';
-        for (let i = 1; i <= totalPages; i++) {
-            const pageButton = document.createElement('button');
-            pageButton.textContent = i;
-            pageButton.classList.add('page-indicator');
-            if (i === currentPage) {
-                pageButton.classList.add('active');
-            }
-            pageButton.addEventListener('click', () => {
-                currentPage = i;
-                updateCards();
-                updatePageIndicators();
-            });
-            pageIndicators.appendChild(pageButton);
+    // Add the selected class to the current slide
+    slides[slideIndex].classList.add('selected');
+
+    // Move the selected thumbnail (3rd image) to the center
+    slides[slideIndex].style.order = 2;
+
+    // Move the other thumbnails accordingly
+    for (let i = 0; i < slides.length; i++) {
+        if (i < slideIndex) {
+            slides[i].style.order = i;
+        } else if (i > slideIndex) {
+            slides[i].style.order = i + 1;
         }
     }
+}
 
-    // Function to update the card display based on pagination
-    function updateCards() {
-        const filterValue = filterSelect.value;
-        const sortValue = sortSelect.value;
+document.querySelector('.arrow-left').addEventListener('click', prevSlide);
+document.querySelector('.arrow-right').addEventListener('click', nextSlide);
 
-        // Filter the cards
-        const filteredCards = filterValue === 'all' ?
-            carData : carData.filter(card => {
-                if (filterValue === 'Desportivos') {
-                    return card.Tag === 'Desportivos';
-                } else if (filterValue === 'classico') {
-                    return card.Tag === 'classico';
-                } else if (filterValue === 'S') {
-                    return card.Classe === 'S';
-                } else if (filterValue === 'D') {
-                    return card.Classe === 'D';
-                }
-            });
+// Initial setup
+updateMainImage();
+reorderThumbnails();
 
-        // Paginate the filtered cards
-        const startIndex = (currentPage - 1) * cardsPerPage;
-        const endIndex = startIndex + cardsPerPage;
-        const paginatedCards = filteredCards.slice(startIndex, endIndex);
-
-        // Sort the cards
-        paginatedCards.sort((a, b) => (a[sortValue] > b[sortValue]) ? 1 : -1);
-
-        // Update the card display
-        cardContainer.innerHTML = '';
-        paginatedCards.forEach(card => {
-            // Create and append card elements
-            const cardElement = document.createElement('div');
-            cardElement.classList.add('card');
-
-            // Create and append card elements
-            cardElement.innerHTML = `
-                <div class="image">
-                    <img src="${card.Image}" alt="Car Image">
-                </div>
-                <div class="caption">
-                    <p class="product_name"><b>${card.name}</b></p>
-                </div>
-                <div class="lower-caption">
-                    <div class="buttons">
-                        <a href="#" class="tag-button">${card.Tag}</a>
-                        <a href="#" class="tag-button">Classe ${card.Classe}</a>
-                    </div>
-                    <p class="price">$${card.Price}</p>
-                </div>
-            `;
-
-            cardContainer.appendChild(cardElement);
-        });
-
-        // Update the page indicators
-        updatePageIndicators();
-    }
-
-    //Event listeners to filter and sort controls
-    const filterSelect = document.getElementById('filter');
-    const sortSelect = document.getElementById('sort');
-    filterSelect.addEventListener('change', () => {
-        currentPage = 1; // Reset to the first page when filtering
-        updateCards();
-    });
-    sortSelect.addEventListener('change', () => {
-        currentPage = 1; // Reset to the first page when sorting
-        updateCards();
-    });
-
-    // Initial card display and page indicators
-    updateCards();
-	
-	// Handling page navigation
-	const prevPageButton = document.querySelector('.prev-page');
-	const nextPageButton = document.querySelector('.next-page');
-
-	prevPageButton.addEventListener('click', () => {
-    	if (currentPage > 1) {
-			currentPage--;
-			updateCards();
-			updatePageIndicators();
-    	}
-	});
-
-	nextPageButton.addEventListener('click', () => {
-		const totalPages = Math.ceil(carData.length / cardsPerPage);
-		if (currentPage < totalPages) {
-			currentPage++;
-			updateCards();
-			updatePageIndicators();
-		}
-	});
-	
-	
-</script>
-	
-
+    </script>
 </body>
 </html>
